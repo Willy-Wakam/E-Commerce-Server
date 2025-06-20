@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const authRoutes = require('./routes/auth/authRoutes');
 
 // Database connection
 
@@ -22,6 +23,7 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 4000;
 
