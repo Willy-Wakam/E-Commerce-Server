@@ -4,9 +4,11 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/auth/authRoutes');
 
+require('dotenv').config();
+
 // Database connection
 
-mongoose.connect('mongodb+srv://williams:Vs5sk53xDsZEs1IH@cluster0.btn4gif.mongodb.net/')
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Connection Error:', err));
 
@@ -14,7 +16,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: 'http://localhost:5173/', // Replace with your frontend URL
+        origin: 'http://localhost:5173', // Replace with your frontend URL
         credentials: true, // Allow cookies to be sent
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'X-Requested-With', 'Accept', 'Pragma', 'Expires'],
@@ -24,6 +26,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api/auth', authRoutes);
+app.use('/api', authRoutes); // Assuming you want to use the same routes for users
 
 const PORT = process.env.PORT || 4000;
 
