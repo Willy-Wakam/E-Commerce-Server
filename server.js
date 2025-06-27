@@ -26,7 +26,6 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api/auth', authRoutes);
-app.use('/api', authRoutes); // Assuming you want to use the same routes for users
 
 const PORT = process.env.PORT || 4000;
 

@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
+
+require("dotenv").config();
 //register
 
 const register = async (req, res) => {
@@ -22,8 +24,11 @@ const register = async (req, res) => {
       password: hashedPassword,
     };
     const savedUser = await User.create(newUser);
-    return res
-      .json({ message: "User registered successfully", user: savedUser, success: true });
+    return res.json({
+      message: "User registered successfully",
+      user: savedUser,
+      success: true,
+    });
   } catch (error) {
     // Handle other errors
     throw error;
@@ -38,8 +43,10 @@ const login = async (req, res) => {
     // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res
-        .json({ error: "User doesn't exist! Please register", success: false });
+      return res.json({
+        error: "User doesn't exist! Please register",
+        success: false,
+      });
     }
     // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -72,20 +79,54 @@ const login = async (req, res) => {
           role: user.role,
         },
       });
-    // Logic for user login
-    res.json({ message: "User logged in successfully" });
   } catch (error) {
     res.json({ error: "Login failed" });
   }
 };
 
 //logout
+const logout = async (req, res) => {
+  try {
+    // Clear the token cookie
+    res
+      .clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Strict",
+      })
+      .json({ message: "User logged out successfully", success: true });
+  } catch (error) {
+    res.json({ error: "Logout failed", success: false });
+  }
+};
 
 //auth middleware
+const authMiddleware = async (req, res, next) => {
+  const token = req.cookies.token; 
+  console.log("Token from cookies:", token);
+  if (!token) {
+    return res
+      .status(401)
+      .json({ error: "Unauthorized access", success: false });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded JWT:", decoded);
+    req.user = {
+        id: decoded.id,
+        role: decoded.role,
+        email: decoded.email,
+        // You can add more user info if needed
+    }; // Attach user info to request object
+    next(); // Proceed to the next middleware or route handler
+  } catch (error) {
+    return res.status(401).json({ error: "Invalid token", success: false });
+  }
+};
 
 module.exports = {
   register,
   login,
-  // logout,
-  // authMiddleware,
+  logout,
+  authMiddleware,
 };
