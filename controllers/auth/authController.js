@@ -55,7 +55,7 @@ const login = async (req, res) => {
     }
     // Generate JWT token
     const token = jwt.sign(
-      { id: user._id, role: user.role, email: user.email },
+      { id: user._id, role: user.role, email: user.email, username: user.username },
       process.env.JWT_SECRET,
       {
         expiresIn: process.env.JWT_EXPIRATION, // Token expiration time
@@ -116,6 +116,7 @@ const authMiddleware = async (req, res, next) => {
         id: decoded.id,
         role: decoded.role,
         email: decoded.email,
+        username: decoded.username
         // You can add more user info if needed
     }; // Attach user info to request object
     next(); // Proceed to the next middleware or route handler
