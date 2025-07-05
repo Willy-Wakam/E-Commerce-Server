@@ -19,7 +19,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: 'http://localhost:5173', // Replace with your frontend URL
+        origin: 'https://e-commerce-app-oa1v.onrender.com', // Replace with your frontend URL
         credentials: true, // Allow cookies to be sent
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'X-Requested-With', 'Accept', 'Pragma', 'Expires'],
