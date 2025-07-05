@@ -55,7 +55,12 @@ const login = async (req, res) => {
     }
     // Generate JWT token
     const token = jwt.sign(
-      { id: user._id, role: user.role, email: user.email, username: user.username },
+      {
+        id: user._id,
+        role: user.role,
+        email: user.email,
+        username: user.username,
+      },
       process.env.JWT_SECRET,
       {
         expiresIn: process.env.JWT_EXPIRATION, // Token expiration time
@@ -66,7 +71,8 @@ const login = async (req, res) => {
       .cookie("token", token, {
         httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
         secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-        sameSite: "Strict", // Helps prevent CSRF attacks
+        sameSite: "None", // Helps prevent CSRF attacks
+        domain: "https://e-commerce-app-oa1v.onrender.com",
       })
       .json({
         message: "User logged in successfully",
@@ -92,7 +98,7 @@ const logout = async (req, res) => {
       .clearCookie("token", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "Strict",
+        sameSite: "None",
       })
       .json({ message: "User logged out successfully", success: true });
   } catch (error) {
@@ -102,7 +108,7 @@ const logout = async (req, res) => {
 
 //auth middleware
 const authMiddleware = async (req, res, next) => {
-  const token = req.cookies.token; 
+  const token = req.cookies.token;
   if (!token) {
     return res
       .status(401)
@@ -111,11 +117,11 @@ const authMiddleware = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = {
-        id: decoded.id,
-        role: decoded.role,
-        email: decoded.email,
-        username: decoded.username
-        // You can add more user info if needed
+      id: decoded.id,
+      role: decoded.role,
+      email: decoded.email,
+      username: decoded.username,
+      // You can add more user info if needed
     }; // Attach user info to request object
     next(); // Proceed to the next middleware or route handler
   } catch (error) {
