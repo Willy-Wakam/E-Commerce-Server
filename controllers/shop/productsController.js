@@ -1,19 +1,50 @@
-const Product = require("../../models/Product")
+const Product = require("../../models/Product");
 
 const getFFilterProducts = async (req, res) => {
-    try {
-        const products = await Product.find({isDeleted: false});
-        res.status(200).json({
-            success: true,
-            data: products
-        })
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            success: false,
-            message: "Error occured"
-        })
-    }
-}
+  try {
+    const { Category = "", Brand = "", sortBy = "" } = req.query;
 
-module.exports = {getFFilterProducts}
+    let filters = {
+      isDeleted: false,
+    };
+    if (Category.length) {
+      filters.category = { $in: Category.split(",") };
+    }
+    if (Brand.length) {
+      filters.brand = { $in: Brand.split(",") };
+    }
+
+    let sort = {};
+
+    switch (sortBy) {
+      case "price-lowToHigh":
+        sort.price = 1;
+        break;
+      case "price-highToLow":
+        sort.price = -1;
+        break;
+      case "name-aToz":
+        sort.name = 1;
+        break;
+      case "name-zToa":
+        sort.name = -1;
+        break;
+      default:
+        sort.price = 1;
+        break;
+    }
+    const products = await Product.find(filters).sort(sort);
+
+    res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error occured",
+    });
+  }
+};
+
+module.exports = { getFFilterProducts };
