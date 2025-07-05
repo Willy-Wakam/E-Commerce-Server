@@ -72,7 +72,6 @@ const login = async (req, res) => {
         httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
         secure: process.env.NODE_ENV === "production", // Use secure cookies in production
         sameSite: "None", // Helps prevent CSRF attacks
-        domain: "https://e-commerce-app-oa1v.onrender.com",
       })
       .json({
         message: "User logged in successfully",
