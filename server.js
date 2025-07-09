@@ -32,16 +32,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin/products', adminProductsRouter);
 app.use('/api/shop/products', shopProductsRouter)
 
-const path = require('path');
-
-// Serve frontend
-app.use(express.static(path.join(__dirname, 'client/dist'))); // Adjust 'dist' or 'build' depending on your setup
-
-// Fallback for React Router (must be after static middleware)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
-});
-
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
