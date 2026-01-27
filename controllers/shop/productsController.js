@@ -1,6 +1,6 @@
 const Product = require("../../models/Product");
 
-const getFFilterProducts = async (req, res) => {
+const getFilterProducts = async (req, res) => {
   try {
     const { Category = "", Brand = "", sortBy = "" } = req.query;
 
@@ -70,4 +70,4 @@ const getProductById = async (req, res) => {
   }
 };
 
-module.exports = { getFFilterProducts, getProductById };
+module.exports = { getFilterProducts, getProductById };

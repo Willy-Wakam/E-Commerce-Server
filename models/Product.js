@@ -37,7 +37,7 @@ const productSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    stock: {
+    totalStock: {
       type: Number,
       required: true,
       min: 0,
@@ -58,6 +58,7 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+      averageReview: Number,
   },
   {
     timestamps: true,
