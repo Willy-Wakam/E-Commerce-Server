@@ -206,8 +206,8 @@ const deleteCartItem = async (req, res) => {
 
         const populateCartItems = cart.items.map((item) => ({
             productId: item.productId ? item.productId._id : null,
-            image: item.productId ? item.productId.image : null,
-            title: item.productId ? item.productId.title : "Product not found",
+            imageUrl: item.productId ? item.productId.imageUrl : null,
+            name: item.productId ? item.productId.name : "Product not found",
             price: item.productId ? item.productId.price : null,
             salePrice: item.productId ? item.productId.salePrice : null,
             quantity: item.quantity,
