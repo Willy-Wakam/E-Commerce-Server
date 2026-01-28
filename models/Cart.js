@@ -19,6 +19,14 @@ const CartSchema = new mongoose.Schema(
                     required: true,
                     min: 1,
                 },
+                name:{
+                    type: String,
+                    required: true,
+                },
+                imageUrl:{
+                    type: String,
+                    required: true,
+                }
             },
         ],
     },
