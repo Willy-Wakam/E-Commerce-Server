@@ -90,7 +90,7 @@ const editProduct = async (req, res) => {
       description,
       category,
       imageUrl,
-      stock,
+      stock: stock,
       brand,
       salePrice,
     } = req.body;

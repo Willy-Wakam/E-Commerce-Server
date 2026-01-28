@@ -123,7 +123,7 @@ const capturePayment = async (req, res) => {
                 });
             }
 
-            product.totalStock -= item.quantity;
+            product.stock -= item.quantity;
 
             await product.save();
         }
